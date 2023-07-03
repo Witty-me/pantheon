@@ -9,8 +9,8 @@ import yaml
 import subprocess
 from datetime import datetime
 
-import context
-from subprocess_wrappers import check_call, check_output, call
+from . import context
+from .subprocess_wrappers import check_call, check_output, call
 
 
 def get_open_port():
@@ -37,7 +37,7 @@ make_sure_dir_exists(tmp_dir)
 
 def parse_config():
     with open(path.join(context.src_dir, 'config.yml')) as config:
-        return yaml.load(config)
+        return yaml.safe_load(config)
 
 
 def update_submodules():
@@ -148,7 +148,7 @@ def query_clock_offset(ntp_addr, ssh_cmd):
         cmd = ntp_cmds[side]
 
         fail = True
-        for _ in xrange(3):
+        for _ in range(3):
             try:
                 offset = check_output(cmd)
                 sys.stderr.write(offset)
